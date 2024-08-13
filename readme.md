@@ -8,7 +8,6 @@ LogProb Viewer is a simple, interactive web application that allows users to vis
 - Interactive token display with hover functionality
 - Show main log probability and alternative tokens on hover
 - Detailed information view on token click
-- Responsive design for various screen sizes
 
 ## Installation
 
