@@ -1,4 +1,4 @@
-# LogProb Viewer
+## Reach the site [here](https://erayyap.github.io/logprobs-viewer/index.html)
 
 LogProb Viewer is a simple, interactive web application that allows users to visualize and explore token-level log probabilities from language model outputs. It provides an intuitive interface for parsing JSON data containing logprobs and displaying them in a user-friendly format.
 
