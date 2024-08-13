@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LogProb Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+        }
+        #output {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .token {
+            display: inline-block;
+            cursor: pointer;
+            margin: 2px;
+            padding: 2px 5px;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+        }
+        .token:hover {
+            background-color: #e0e0e0;
+        }
+        #logprob-info {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>LogProb Viewer</h1>
+    <textarea id="json-input" placeholder="Paste your JSON data here"></textarea>
+    <button onclick="processInput()">Process</button>
+    <div id="output"></div>
+    <div id="logprob-info"></div>
+
+    <script>
+        function processInput() {
+            const jsonInput = document.getElementById('json-input').value;
+            const output = document.getElementById('output');
+            const logprobInfo = document.getElementById('logprob-info');
+
+            try {
+                const data = JSON.parse(jsonInput);
+                const content = data.choices[0].message.content;
+                const logprobs = data.choices[0].logprobs.content;
+
+                output.innerHTML = '';
+                logprobs.forEach((item, index) => {
+                    const span = document.createElement('span');
+                    span.className = 'token';
+                    span.textContent = item.token;
+                    span.onclick = () => showLogProbInfo(item);
+                    output.appendChild(span);
+                });
+            } catch (error) {
+                output.textContent = 'Error processing JSON: ' + error.message;
+            }
+        }
+
+        function showLogProbInfo(item) {
+            const logprobInfo = document.getElementById('logprob-info');
+            logprobInfo.style.display = 'block';
+            
+            let html = `<h3>Token: "${item.token}"</h3>`;
+            html += `<p>LogProb: ${item.logprob}</p>`;
+            html += `<p>Bytes: ${JSON.stringify(item.bytes)}</p>`;
+            html += '<h4>Top LogProbs:</h4><ul>';
+            
+            item.top_logprobs.forEach(topItem => {
+                html += `<li>"${topItem.token}": ${topItem.logprob}</li>`;
+            });
+            
+            html += '</ul>';
+            logprobInfo.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
